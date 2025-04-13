@@ -11,7 +11,35 @@ import SwiftUI
 struct MeokuApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                MeokuDayMenuView()
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            HStack(spacing: 4) {
+                                Image("meokuPNG")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 19)
+
+                                Image("MeokuLogo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 14)
+                            }
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                // 햄버거 메뉴 액션
+                            }) {
+                                Image(systemName: "line.3.horizontal")
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                    }
+                    .toolbarBackground(Color.gray.opacity(0.05), for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
+            }
         }
     }
 }
+

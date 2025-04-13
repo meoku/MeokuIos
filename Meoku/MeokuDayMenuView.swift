@@ -46,6 +46,7 @@ struct WeekHeaderView: View {
                 Button(action: {
                     selectedDate = selectedDate.adjustedByWeek(offset: -1)
                     selectedIndex = 4
+                    menuService.weekMenus = []
                     menuService.fetchMenus(for: selectedDate)
                     
                 }) {
@@ -67,6 +68,7 @@ struct WeekHeaderView: View {
                 Button(action: {
                     selectedDate = selectedDate.adjustedByWeek(offset: 1)
                     selectedIndex = 0
+                    menuService.weekMenus = []
                     menuService.fetchMenus(for: selectedDate)
                 }) {
                     Image(systemName: "chevron.right")
@@ -93,7 +95,7 @@ struct WeekHeaderView: View {
         }
         .sheet(isPresented: $showPopup) {
             VStack {
-                Text("\(selectedDate.getMonthAndWeekString)식사 순서")
+                Text("[\(selectedDate.getMonthAndWeekString)] 식사 순서")
                     .font(.headline)
                 
                 ForEach(menuOrderService.mealOrders) { order in

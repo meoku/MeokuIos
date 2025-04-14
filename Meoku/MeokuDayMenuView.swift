@@ -158,19 +158,29 @@ struct MenuTabView: View {
         TabView(selection: $selectedIndex) {
             ForEach(0..<5) { index in
                 Group {
-                    if menuService.weekMenus.count == 5 &&
-                        menuService.weekMenus[index].restaurantOpenFg == "Y"
+                    if menuService.weekMenus.count == 5{ //일단 API로 식단을 가져온 경우
+                        // 식단이
+                        if menuService.weekMenus[index].restaurantOpenFg == "Y"
                         {
-                        MenuDetailCardView(curDate :weekDateList[selectedIndex], menuDetails: menuService.weekMenus[index].menuDetailsList)
+                            MenuDetailCardView(curDate :weekDateList[selectedIndex], menuDetails: menuService.weekMenus[index].menuDetailsList)
+                        } else if menuService.weekMenus[index].holidayFg == "Y" && // 공휴일
+                                    menuService.weekMenus[index].restaurantOpenFg == "N"
+                        {
+                            Text("공휴일")
+                                .font(.subheadline)
+                                .foregroundColor(.primary)
                         } else {
-                            Text("준비중입니다")
+                            
                         }
+                    }else{
+                        Text("준비중입니다")
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    //.background(Color.blue.opacity(0.1))
-                    .cornerRadius(10)
-                    .padding()
-                    .tag(index)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                //.background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+                .padding()
+                .tag(index)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

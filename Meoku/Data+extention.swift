@@ -37,12 +37,30 @@ extension Date {
     
     /// "M월 N주차" 반환
     var getMonthAndWeekString: String {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.firstWeekday = 2 // 월요일 시작
+        let calendar = Calendar(identifier: .gregorian)
+        // 주간의 수요일 기준으로 주차 계산
+        let weekday = calendar.component(.weekday, from: self)
+        let diffToWednesday = 4 - weekday
+        let referenceDate = calendar.date(byAdding: .day, value: diffToWednesday, to: self) ?? self
 
-        let month = calendar.component(.month, from: self)
-        let week = calendar.component(.weekOfMonth, from: self)
-        return "\(month)월 \(week)주차"
+        let month = calendar.component(.month, from: referenceDate)
+        
+        // 해당 월의 첫 번째 수요일 구하기
+        var firstOfMonthComponents = calendar.dateComponents([.year, .month], from: referenceDate)
+        firstOfMonthComponents.day = 1
+        let firstOfMonth = calendar.date(from: firstOfMonthComponents)!
+        let firstWednesday: Date = {
+            var date = firstOfMonth
+            while calendar.component(.weekday, from: date) != 4 {
+                date = calendar.date(byAdding: .day, value: 1, to: date)!
+            }
+            return date
+        }()
+
+        // 주차 계산: 첫 수요일로부터 몇 주가 지났는지
+        let week = calendar.dateComponents([.weekOfMonth], from: firstWednesday, to: referenceDate).weekOfMonth ?? 0
+
+        return "\(month)월 \(week + 1)주차"
     }
     
     /// 내가 속한 주간의 월요일 날짜 반환 (월~일 기준)

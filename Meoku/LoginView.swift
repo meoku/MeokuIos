@@ -65,23 +65,32 @@ struct LoginView: View {
             .padding(.horizontal)
 
             // 아이디 찾기 / 비밀번호 찾기 / 회원가입
-            HStack(spacing: 8) {
-                ForEach(["아이디 찾기", "비밀번호 찾기", "회원가입"].indices, id: \.self) { index in
-                    Button(["아이디 찾기", "비밀번호 찾기", "회원가입"][index]) {
-                        // 각 버튼 액션
-                    }
-                    .font(.footnote)
-                    .foregroundColor(textColor)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+            GeometryReader { geometry in
+                let totalWidth = geometry.size.width * 2 / 3
+                let buttonWidth = totalWidth / 3
 
-                    if index < 2 {
-                        Text("|")
-                            .foregroundColor(textColor)
+                HStack(spacing: 0) {
+                    Spacer(minLength: (geometry.size.width - totalWidth) / 2)
+
+                    ForEach(["아이디 찾기", "비밀번호 찾기", "회원가입"].indices, id: \.self) { index in
+                        Button(["아이디 찾기", "비밀번호 찾기", "회원가입"][index]) {
+                            // 각 버튼 액션
+                        }
+                        .font(.footnote)
+                        .foregroundColor(textColor)
+                        .lineLimit(1)
+                        .frame(width: buttonWidth)
+
+                        if index < 2 {
+                            Text("|")
+                                .foregroundColor(textColor)
+                        }
                     }
+
+                    Spacer(minLength: (geometry.size.width - totalWidth) / 2)
                 }
             }
-            .padding(.horizontal) // 좌우 방향으로 기본 여백
+            .frame(height: 20)
 
             Spacer().frame(height: 24) // 위 아래 요소사이에 세로간격 24만큼 띄움
 

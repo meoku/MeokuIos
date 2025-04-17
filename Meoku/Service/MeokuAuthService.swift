@@ -57,10 +57,6 @@ class AuthService {
             do {
                 let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                 DispatchQueue.main.async {
-                    // 로그인 성공 시, access_token과 refresh_token을 UserDefaults에 저장
-                    // 저장된 토큰은 이후 인증이 필요한 요청 시 불러와 사용
-                    UserDefaults.standard.set(loginResponse.access_token, forKey: "access_token")
-                    UserDefaults.standard.set(loginResponse.refresh_token, forKey: "refresh_token")
                     completion(.success(loginResponse))
                 }
             } catch {
@@ -106,9 +102,6 @@ class AuthService {
 
             do {
                 let response = try JSONDecoder().decode(LoginResponse.self, from: data)
-                // 갱신된 토큰을 다시 UserDefaults에 저장
-                UserDefaults.standard.set(response.access_token, forKey: "access_token")
-                UserDefaults.standard.set(response.refresh_token, forKey: "refresh_token")
                 DispatchQueue.main.async {
                     completion(.success(response))
                 }

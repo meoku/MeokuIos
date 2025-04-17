@@ -11,9 +11,8 @@ private let textColor = Color(red: 0.4, green: 0.4, blue: 0.4) // #666666
 private let textFieldHeight: CGFloat = 50
 
 struct LoginView: View {
-    @State private var userId: String = ""
-    @State private var password: String = ""
-    @State private var keepLoggedIn: Bool = false
+    @StateObject var authViewModel = AuthViewModel()
+    @Environment(\.presentationMode) var presentationMode // 이전 화면으로 돌아가기
 
     var body: some View {
         VStack(spacing: 16) {
@@ -28,13 +27,13 @@ struct LoginView: View {
             Spacer().frame(height: 24)
 
             // 아이디 및 비밀번호 입력
-            TextField("아이디", text: $userId)
+            TextField("아이디", text: $authViewModel.userId)
                 .padding()
                 .frame(height: textFieldHeight)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
                 .padding(.horizontal)
 
-            SecureField("비밀번호", text: $password)
+            SecureField("비밀번호", text: $authViewModel.password)
                 .padding()
                 .frame(height: textFieldHeight)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
@@ -43,7 +42,7 @@ struct LoginView: View {
 
             // 로그인 상태 유지 체크박스
             HStack {
-                Toggle(isOn: $keepLoggedIn) {
+                Toggle(isOn: $authViewModel.keepLoggedIn) {
                     Text("로그인 상태 유지")
                         .foregroundColor(textColor)
                         .font(.footnote)
@@ -55,7 +54,11 @@ struct LoginView: View {
 
             // 로그인 버튼
             Button("로그인") {
-                // 로그인 액션
+                // 로그인 처리
+                authViewModel.login {
+                    // 로그인 성공 시, 이전 화면으로 돌아가기
+                    self.presentationMode.wrappedValue.dismiss()
+                }
             }
             .frame(maxWidth: .infinity)
             .padding()
@@ -63,6 +66,21 @@ struct LoginView: View {
             .foregroundColor(.white)
             .cornerRadius(8)
             .padding(.horizontal)
+            .disabled(authViewModel.isLoading) // 로딩 중엔 비활성화
+            
+            // 로딩 중일 때 표시
+            if authViewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+            }
+
+            // 로그인 실패 시 에러 메시지 표시
+            if let error = authViewModel.loginError {
+                Text(error)
+                    .foregroundColor(.red)
+                    .font(.footnote)
+            }
+            
 
             // 아이디 찾기 / 비밀번호 찾기 / 회원가입
             GeometryReader { geometry in

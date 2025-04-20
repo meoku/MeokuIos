@@ -53,18 +53,19 @@ struct LoginView: View {
             }
 
             // 로그인 버튼
-            Button("로그인") {
-                // 로그인 처리
+            Button(action: {
                 authViewModel.login {
-                    // 로그인 성공 시, 이전 화면으로 돌아가기
                     self.presentationMode.wrappedValue.dismiss()
                 }
+            }) {
+                Text("로그인")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(.sRGB, red: 1.0, green: 0.251, blue: 0.016, opacity: 1.0))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .contentShape(Rectangle()) // ← 배경 전체를 터치 영역으로
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(.sRGB, red: 1.0, green: 0.251, blue: 0.016, opacity: 1.0))
-            .foregroundColor(.white)
-            .cornerRadius(8)
             .padding(.horizontal)
             .disabled(authViewModel.isLoading) // 로딩 중엔 비활성화
             
@@ -157,6 +158,7 @@ struct CheckboxToggleStyle: ToggleStyle {
         }
     }
 }
+    
 #Preview {
     LoginView()
 }

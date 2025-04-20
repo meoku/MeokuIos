@@ -9,6 +9,7 @@ import Foundation
 class AuthViewModel: ObservableObject {
     @Published var userId: String = ""
     @Published var password: String = ""
+    @Published var nickName: String? = nil
     @Published var keepLoggedIn: Bool = false
     
     @Published var isLoading: Bool = false
@@ -25,13 +26,12 @@ class AuthViewModel: ObservableObject {
                 self?.isLoading = false
                 switch result {
                 case .success(let response):
-                    print("성공~")
                     UserDefaults.standard.set(response.access_token, forKey: "access_token")
                     UserDefaults.standard.set(response.refresh_token, forKey: "refresh_token")
                     UserDefaults.standard.set(self?.keepLoggedIn, forKey: "keepLoggedIn") // 상태 유지 여부 저장
+                    self?.nickName = response.nickname
                     completion?()
                 case .failure(let error):
-                    print("실패!")
                     self?.loginError = error.localizedDescription
                 }
             }

@@ -22,6 +22,7 @@ struct CommonLayoutView<Content: View>: View {
     }
 
     var body: some View {
+        
         NavigationStack {
             ZStack {
                 content // 주요 뷰가 보여질 자리
@@ -44,27 +45,24 @@ struct CommonLayoutView<Content: View>: View {
                     VStack(alignment: .leading, spacing: 20) {
                         // 로그인 버튼 (상단)
                         HStack(spacing: 0) {
-//                            guard let nickname = authViewModel.nickname else {
-//                                NavigationLink(destination: LoginView()) {
-//                                    HStack {
-//                                        Text("로그인")
-//                                            .font(.system(size: 17, weight: .semibold))
-//                                        Image(systemName: "chevron.right")
-//                                            .font(.system(size: 17))
-//                                    }
-//                                    .foregroundColor(.primary)
-//                                }
-//                                return
-//                            }
-
-                            NavigationLink(destination: LoginView()) {
+                            if let nickname = authViewModel.nickName {
                                 HStack {
-                                    Text("로그인")
+                                    Text(nickname)
                                         .font(.system(size: 17, weight: .semibold))
-                                    Image(systemName: "chevron.right")
+                                    Image(systemName: "person.crop.circle")
                                         .font(.system(size: 17))
                                 }
                                 .foregroundColor(.primary)
+                            } else {
+                                NavigationLink(destination: LoginView()) {
+                                    HStack {
+                                        Text("로그인")
+                                            .font(.system(size: 17, weight: .semibold))
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 17))
+                                    }
+                                    .foregroundColor(.primary)
+                                }
                             }
                         }
                         .padding(.top, 20)

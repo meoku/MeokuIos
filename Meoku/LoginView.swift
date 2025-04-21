@@ -11,7 +11,7 @@ private let textColor = Color(red: 0.4, green: 0.4, blue: 0.4) // #666666
 private let textFieldHeight: CGFloat = 50
 
 struct LoginView: View {
-    @StateObject var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.presentationMode) var presentationMode // 이전 화면으로 돌아가기
 
     var body: some View {

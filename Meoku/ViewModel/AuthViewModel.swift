@@ -20,8 +20,8 @@ class AuthViewModel: ObservableObject {
         loginError = nil
 
         AuthService.shared.login(id: userId, password: password) { [weak self] result in
-            print(self?.userId ?? "no user id")
-            print(self?.password ?? "no password")
+            //print(self?.userId ?? "no user id")
+            //print(self?.password ?? "no password")
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
@@ -32,6 +32,7 @@ class AuthViewModel: ObservableObject {
                     self?.nickName = response.nickname
                     completion?()
                 case .failure(let error):
+                    print(error)
                     self?.loginError = error.localizedDescription
                 }
             }

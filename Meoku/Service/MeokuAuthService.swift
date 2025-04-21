@@ -10,7 +10,8 @@ import Foundation
 // let token = UserDefaults.standard.string(forKey: "access_token")
 
 //전역변수로써 다른 서비스 코드에서도 사용 가능
-let BASE_URL = "https://port-0-meokuserver-1cupyg2klv9emciy.sel5.cloudtype.app"
+//let BASE_URL = "https://port-0-meokuserver-1cupyg2klv9emciy.sel5.cloudtype.app"
+let BASE_URL = "http://localhost:8080"
 
 class AuthService {
     static let shared = AuthService()
@@ -55,6 +56,12 @@ class AuthService {
             }
 
             do {
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []),
+                   let prettyData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+                   let jsonString = String(data: prettyData, encoding: .utf8) {
+                    print("💬 로그인 응답 JSON:\n\(jsonString)")
+                }
+                
                 let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(loginResponse))

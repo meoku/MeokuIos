@@ -12,6 +12,7 @@ struct LoginRequest: Codable {
 }
 
 struct LoginResponse: Codable {
+    let nickname: String
     let access_token: String
     let refresh_token: String
 }

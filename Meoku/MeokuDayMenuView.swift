@@ -27,6 +27,7 @@ struct MeokuDayMenuView: View {
         .onAppear {
             menuService.fetchMenus(for: selectedDate)
         }
+        .background(Color.lightGrayBackground)
     }
 }
 
@@ -179,7 +180,7 @@ struct MenuTabView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 //.background(Color.blue.opacity(0.1))
                 .cornerRadius(10)
-                .padding()
+                .padding(.horizontal)
                 .tag(index)
             }
         }
@@ -228,7 +229,7 @@ struct MenuDetailCardView: View {
                             Spacer()
                             Text("저녁")
                                 .font(.subheadline)
-                                .foregroundColor(.primary)
+                                .foregroundColor(curDate.isTodayYn ? Color.white : .primary)
                                 .bold()
                         }
                         .padding(.horizontal)
@@ -237,35 +238,50 @@ struct MenuDetailCardView: View {
                         .cornerRadius(8)
                         .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 2)
                     }
-                    
-                    HStack(spacing: 0) {
-                        // 왼쪽: 카테고리 (한식, 일품 등)
-                        VStack {
-                            Text(detail.menuDetailsName)
-                                .bold()
-                        }
-                        .frame(width: UIScreen.main.bounds.width * 0.25)
+                    //식단 내용
+                    VStack(spacing: 0) {
+                        VStack(alignment: .center, spacing: 4) {
+                            // 식단 이름 + 돋보기
+                            ZStack(alignment: .topTrailing) {
+                                Text(detail.menuDetailsName)
+                                    .font(.system(size: 20, weight: .bold))
+                                    .multilineTextAlignment(.center)
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(Color.meokuWordColor)
 
-                        // 오른쪽: 메뉴 나열
-                        VStack(alignment: .leading, spacing: 4) {
+                                Button(action: {
+                                    // 검색 액션
+                                }) {
+                                    Image(systemName: "plus.magnifyingglass")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                        .foregroundColor(Color.meokuWordColor)
+                                }
+//                                .padding(.top, 4)
+                                .padding(.trailing, 20)
+                            }
+                            .padding(.bottom, 8)
+                            
+                            // 메뉴 채우기
                             ForEach(detail.subBridgeList.indices, id: \.self) { index in
                                 Text(detail.subBridgeList[index].menuItemName)
                                     .font(.callout)
                                     .bold(index == 0)
+                                    .foregroundColor(Color.meokuWordColor)
                             }
                         }
                         .padding(.leading, 12)
                         .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     )
-                    .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 2)
+                    .background(Color.white)
+//                    .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 2)
                     .cornerRadius(8)
+                    
                 }
             }
             .padding()

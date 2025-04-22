@@ -38,7 +38,7 @@ struct LoginView: View {
                 .frame(height: textFieldHeight)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
                 .padding(.horizontal)
-                .padding(.top, 4)
+                .padding(.top, -5)
 
             // 로그인 상태 유지 체크박스
             HStack {
@@ -129,18 +129,26 @@ struct LoginView: View {
 
             // 소셜 로그인 버튼들
             HStack(spacing: 20) {
-                ForEach(["apple", "google", "naver", "kakao"], id: \.self) { name in
+                ForEach(["naver", "kakao", "apple", "google"], id: \.self) { name in
                     Button(action: {
                         // 소셜 로그인 액션
                     }) {
+                        Image("slogin\(name)")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 50) // 버튼 높이는 원하는 크기로 조정 가능
                     }
                 }
             }
+            .padding(.top, 8)
+            
 
             Spacer()
         }
         .padding()
+        .background(Color.lightGrayBackground)
     }
+        
 }
 
 // Checkbox 스타일
@@ -160,5 +168,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 }
     
 #Preview {
+    @StateObject var authViewModel = AuthViewModel()
     LoginView()
+        .environmentObject(authViewModel)
 }

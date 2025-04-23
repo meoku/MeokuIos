@@ -47,7 +47,7 @@ struct CommonLayoutView<Content: View>: View {
                         HStack(spacing: 0) {
                             if authViewModel.isLoggedIn {
                                 HStack {
-                                    Text(authViewModel.nickName ?? "일반사용자")
+                                    Text(UserDefaults.standard.string(forKey: "nickname") ?? "일반사용자")
                                         .font(.system(size: 17, weight: .semibold))
                                     Button(action: {
                                         authViewModel.logout()

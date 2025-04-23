@@ -9,7 +9,6 @@ import Foundation
 class AuthViewModel: ObservableObject {
     @Published var userId: String = ""
     @Published var password: String = ""
-    @Published var nickName: String? = nil
     @Published var isLoggedIn: Bool = false
     
     @Published var isLoading: Bool = false
@@ -26,8 +25,7 @@ class AuthViewModel: ObservableObject {
                 }
             }
         } else { //엑세스, 리프레시 모두 만료거나 없을때
-            isLoggedIn = false
-            nickName = nil
+            logout()
         }
     }
     
@@ -65,8 +63,9 @@ class AuthViewModel: ObservableObject {
                 case .success(let response):
                     UserDefaults.standard.set(response.access_token, forKey: "access_token")
                     UserDefaults.standard.set(response.refresh_token, forKey: "refresh_token")
-//                    UserDefaults.standard.set(self?.keepLoggedIn, forKey: "keepLoggedIn") // 상태 유지 여부 저장
-                    self?.nickName = response.nickname
+                    UserDefaults.standard.set(response.nickname, forKey: "nickname")
+
+                    self?.isLoggedIn = true
                     completion?()
                 case .failure(let error):
                     print(error)
@@ -80,7 +79,7 @@ class AuthViewModel: ObservableObject {
     func logout() {
         UserDefaults.standard.removeObject(forKey: "access_token")
         UserDefaults.standard.removeObject(forKey: "refresh_token")
-        nickName = nil
+        UserDefaults.standard.removeObject(forKey: "nickname")
         isLoggedIn = false
     }
     

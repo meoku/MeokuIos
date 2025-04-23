@@ -27,30 +27,27 @@ struct LoginView: View {
             Spacer().frame(height: 24)
 
             // 아이디 및 비밀번호 입력
-            TextField("아이디", text: $authViewModel.userId)
-                .padding()
+//            TextField("아이디", text: $authViewModel.userId)
+//                .padding()
+//                .frame(height: textFieldHeight)
+//                .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
+//                .padding(.horizontal)
+//
+//            SecureField("비밀번호", text: $authViewModel.password)
+//                .padding()
+//                .frame(height: textFieldHeight)
+//                .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
+//                .padding(.horizontal)
+//                .padding(.top, -5)
+
+            CustomTextField(text: $authViewModel.userId, placeholder: "아이디")
                 .frame(height: textFieldHeight)
-                .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
                 .padding(.horizontal)
 
-            SecureField("비밀번호", text: $authViewModel.password)
-                .padding()
+            CustomTextField(text: $authViewModel.password, placeholder: "비밀번호", isSecure: true)
                 .frame(height: textFieldHeight)
-                .background(RoundedRectangle(cornerRadius: 8).stroke(borderColor))
                 .padding(.horizontal)
-                .padding(.top, -5)
-
-            // 로그인 상태 유지 체크박스
-//            HStack {
-//                Toggle(isOn: $authViewModel.keepLoggedIn) {
-//                    Text("로그인 상태 유지")
-//                        .foregroundColor(textColor)
-//                        .font(.footnote)
-//                }
-//                .toggleStyle(CheckboxToggleStyle())
-//                .padding(.leading)
-//                Spacer()
-//            }
+                .padding(.top, -10)
 
             // 로그인 버튼
             Button(action: {
@@ -151,18 +148,43 @@ struct LoginView: View {
         
 }
 
-// Checkbox 스타일
-struct CheckboxToggleStyle: ToggleStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            Image(systemName: configuration.isOn ? "checkmark.square" : "square")
-                .foregroundColor(borderColor)
-            configuration.label
-                .foregroundColor(textColor)
-                .font(.footnote)
+// 그냥 textview로 입력 받으면 아이폰 키보드 나타날때 렉걸리고 경고메시지남
+struct CustomTextField: UIViewRepresentable {
+    @Binding var text: String
+    var placeholder: String
+    var isSecure: Bool = false
+
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.isSecureTextEntry = isSecure
+        textField.placeholder = placeholder
+        textField.delegate = context.coordinator
+        textField.borderStyle = .roundedRect
+        
+        // 보조 입력 뷰 제거!
+        textField.inputAssistantItem.leadingBarButtonGroups = []
+        textField.inputAssistantItem.trailingBarButtonGroups = []
+
+        return textField
+    }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator($text)
+    }
+
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var text: Binding<String>
+
+        init(_ text: Binding<String>) {
+            self.text = text
         }
-        .onTapGesture {
-            configuration.isOn.toggle()
+
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text.wrappedValue = textField.text ?? ""
         }
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 // let token = UserDefaults.standard.string(forKey: "access_token")
 
 //전역변수로써 다른 서비스 코드에서도 사용 가능
-//let BASE_URL = "https://port-0-meokuserver-1cupyg2klv9emciy.sel5.cloudtype.app"
-let BASE_URL = "http://localhost:8080"
+let BASE_URL = "https://port-0-meokuserver-1cupyg2klv9emciy.sel5.cloudtype.app"
+//let BASE_URL = "http://localhost:8080"
 
 class AuthService {
     static let shared = AuthService()

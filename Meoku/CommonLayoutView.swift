@@ -45,14 +45,18 @@ struct CommonLayoutView<Content: View>: View {
                     VStack(alignment: .leading, spacing: 20) {
                         // 로그인 버튼 (상단)
                         HStack(spacing: 0) {
-                            if let nickname = authViewModel.nickName {
+                            if authViewModel.isLoggedIn {
                                 HStack {
-                                    Text(nickname)
+                                    Text(authViewModel.nickName ?? "일반사용자")
                                         .font(.system(size: 17, weight: .semibold))
-                                    Image(systemName: "person.crop.circle")
-                                        .font(.system(size: 17))
+                                    Button(action: {
+                                        authViewModel.logout()
+                                    }) {
+                                        Image(systemName: "rectangle.portrait.and.arrow.forward")
+                                            .font(.system(size: 17))
+                                    }
+                                    .foregroundColor(.primary)
                                 }
-                                .foregroundColor(.primary)
                             } else {
                                 NavigationLink(destination: LoginView()) {
                                     HStack {

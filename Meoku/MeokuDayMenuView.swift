@@ -229,7 +229,7 @@ struct MenuDetailCardView: View {
                             Spacer()
                             Text("저녁")
                                 .font(.subheadline)
-                                .foregroundColor(curDate.isTodayYn ? Color.white : .primary)
+                                .foregroundColor(.primary)
                                 .bold()
                         }
                         .padding(.horizontal)

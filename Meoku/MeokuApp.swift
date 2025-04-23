@@ -24,6 +24,9 @@ struct MeokuApp: App {
             ) {
                 MeokuDayMenuView()
             }
+            .onAppear{
+                authViewModel.checkLoginStatusAndRefreshTokens() //로그인 상태 확인 및 토큰 갱신
+            }
         }
         .environmentObject(authViewModel)//앱 전체에서 로그인관련 기능을 쓰고 확인하려면 모든 뷰에서 접근 가능하도록 주입
     }

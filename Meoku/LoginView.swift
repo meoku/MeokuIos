@@ -41,16 +41,16 @@ struct LoginView: View {
                 .padding(.top, -5)
 
             // 로그인 상태 유지 체크박스
-            HStack {
-                Toggle(isOn: $authViewModel.keepLoggedIn) {
-                    Text("로그인 상태 유지")
-                        .foregroundColor(textColor)
-                        .font(.footnote)
-                }
-                .toggleStyle(CheckboxToggleStyle())
-                .padding(.leading)
-                Spacer()
-            }
+//            HStack {
+//                Toggle(isOn: $authViewModel.keepLoggedIn) {
+//                    Text("로그인 상태 유지")
+//                        .foregroundColor(textColor)
+//                        .font(.footnote)
+//                }
+//                .toggleStyle(CheckboxToggleStyle())
+//                .padding(.leading)
+//                Spacer()
+//            }
 
             // 로그인 버튼
             Button(action: {

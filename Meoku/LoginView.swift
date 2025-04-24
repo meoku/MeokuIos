@@ -144,6 +144,10 @@ struct LoginView: View {
         }
         .padding()
         .background(Color.lightGrayBackground)
+        .onAppear {
+            authViewModel.userId = ""
+            authViewModel.password = ""
+        }
     }
         
 }
@@ -156,12 +160,33 @@ struct CustomTextField: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
+
+        // 비밀번호 입력이면 보안 설정
         textField.isSecureTextEntry = isSecure
+
+        // 플레이스홀더 텍스트 설정 (다크모드에서도 보이도록 색상 지정)
         textField.placeholder = placeholder
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: UIColor.gray]
+        )
+
+        // 델리게이트 설정
         textField.delegate = context.coordinator
-        textField.borderStyle = .roundedRect
-        
-        // 보조 입력 뷰 제거!
+
+        // 기본 보더 제거 (우리가 직접 테두리 스타일 지정할 것이기 때문)
+        textField.borderStyle = .none
+
+        // 왼쪽 여백 추가 (텍스트가 너무 붙지 않도록)
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        textField.leftViewMode = .always
+
+        // 테두리 색상, 두께, 모서리 둥글기 설정
+        textField.layer.borderColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        textField.layer.borderWidth = 1
+        textField.layer.cornerRadius = 8
+
+        // 자동 완성 툴바 제거 (위에 나오는 자동 제안 버튼)
         textField.inputAssistantItem.leadingBarButtonGroups = []
         textField.inputAssistantItem.trailingBarButtonGroups = []
 
